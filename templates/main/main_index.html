@@ -1,0 +1,7 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <h1>Bienvenido a Sabor Casero</h1>
+    <p>Tu plataforma de recetas caseras.</p>
+    {{ request.user.username }}
+{% endblock %}
