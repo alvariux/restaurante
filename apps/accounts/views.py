@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm
+from .models import AppUser
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def login_view(request):
     form = LoginForm()
@@ -29,3 +32,9 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('main_index')
+
+class UserListView(LoginRequiredMixin, ListView):
+    login_url = 'accounts:login'
+    model = AppUser
+    template_name = 'accounts/user_list.html'
+    context_object_name = 'users'
