@@ -7,5 +7,6 @@
     {% csrf_token %}
     <p>¿Estás seguro de que deseas eliminar la categoría "{{ object.nombre }}"?</p>
     <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a class="btn btn-primary" href="{% url 'categorias:categoria_list' %}">Regresar</a>
 </form>
 {% endblock %}
