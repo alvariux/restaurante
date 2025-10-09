@@ -12,4 +12,6 @@ urlpatterns = [
     path('mesas/nuevo/', views.MesaCreateView.as_view(), name='mesas_create'),
     path('mesas/editar/<int:pk>/', views.MesaUpdateView.as_view(), name='mesas_update'),
     path('mesas/eliminar/<int:pk>/', views.MesaDeleteView.as_view(), name='mesas_delete'),
+    path('ordenes/', views.OrdenListView.as_view(), name='ordenes_list'),
+    path('ordenes/nuevo/', views.OrdenCreateView.as_view(), name='ordenes_create'),
 ]
