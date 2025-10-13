@@ -27,5 +27,8 @@ class OrdenDetalle(models.Model):
     platillo = models.ForeignKey(Platillo, on_delete=models.CASCADE, related_name='detalles')
     cantidad = models.IntegerField()
     notas = models.TextField(blank=True, null=True)
-    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)    
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.platillo.nombre} x {self.cantidad} (Orden #{self.orden.id})"
     
