@@ -132,3 +132,12 @@ class OrdenDetalleDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return f'/ordenes/ordenes/{self.object.orden.id}/detalles/'
 
+class OrdenPagarView(LoginRequiredMixin, View):
+    def get(self, request, orden_id):
+        orden = Orden.objects.get(id=orden_id)
+        detalles = OrdenDetalle.objects.filter(orden=orden)
+        total = sum(detalle.cantidad * detalle.precio_unitario for detalle in detalles)
+        return render(request, 'ordenes/ordenes_pagar.html', {'orden': orden, 'detalles': detalles, 'total': total})
+
+    
+
