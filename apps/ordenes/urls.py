@@ -22,4 +22,5 @@ urlpatterns = [
     path('metodos_pago/nuevo/', views.MetodoPagoCreateView.as_view(), name='metodos_pago_create'),
     path('metodos_pago/editar/<int:pk>/', views.MetodoPagoUpdateView.as_view(), name='metodos_pago_edit'),
     path('metodos_pago/eliminar/<int:pk>/', views.MetodoPagoDeleteView.as_view(), name='metodos_pago_delete'),
+    path('pagos/', views.PagoListView.as_view(), name='pagos_list'),
 ]

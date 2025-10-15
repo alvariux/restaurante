@@ -161,3 +161,8 @@ class MetodoPagoDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'pagos/metodos_pago_confirm_delete.html'
     success_url = '/ordenes/metodos_pago/'    
 
+class PagoListView(LoginRequiredMixin, ListView):
+    model = Pago
+    template_name = 'pagos/pagos_list.html'
+    context_object_name = 'pagos'
+
