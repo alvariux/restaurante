@@ -1,5 +1,5 @@
 import django.forms as forms
-from .models import Mesa, MesaEstado, Orden
+from .models import Mesa, MesaEstado, Orden, MetodoPago, Pago
 from apps.platillos.models import Platillo
 
 class MesaEstadoForm(forms.ModelForm):
@@ -42,3 +42,11 @@ class OrdenDetalleForm(forms.Form):
     cantidad = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
     notas = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), required=False)    
     orden_id = forms.IntegerField(widget=forms.HiddenInput())
+
+class MetodoPagoForm(forms.ModelForm):
+    class Meta:
+        model = MetodoPago
+        fields = ['nombre']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'})
+        }
