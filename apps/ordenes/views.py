@@ -3,8 +3,10 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.shortcuts import redirect
 from .models import Mesa, MesaEstado, Orden, OrdenDetalle, MetodoPago, Pago
-from .forms import MesaEstadoForm, MesaForm, OrdenForm, OrdenDetalleForm, MetodoPagoForm
+from .forms import MesaEstadoForm, MesaForm, OrdenForm, OrdenDetalleForm, MetodoPagoForm, PagoForm
 
 class MesaEstadoListView(LoginRequiredMixin, ListView):
     model = MesaEstado
@@ -54,6 +56,7 @@ class OrdenListView(LoginRequiredMixin, ListView):
     model = Orden
     template_name = 'ordenes/ordenes_list.html'
     context_object_name = 'ordenes'
+    ordering = ['-fecha_hora']
 
 class OrdenCreateView(LoginRequiredMixin, CreateView):
     model = Orden
@@ -137,7 +140,28 @@ class OrdenPagarView(LoginRequiredMixin, View):
         orden = Orden.objects.get(id=orden_id)
         detalles = OrdenDetalle.objects.filter(orden=orden)
         total = sum(detalle.cantidad * detalle.precio_unitario for detalle in detalles)
-        return render(request, 'ordenes/ordenes_pagar.html', {'orden': orden, 'detalles': detalles, 'total': total})
+        
+        form = PagoForm(initial={'orden': orden, 'cantidad': total})
+
+        return render(request, 'ordenes/ordenes_pagar.html', {'orden': orden, 'detalles': detalles, 'total': total, 'form': form})
+    def post(self, request, orden_id):
+        form = PagoForm(request.POST)
+        if form.is_valid():
+            with transaction.atomic():
+                pago = form.save(commit=False)
+                pago.orden = Orden.objects.get(id=orden_id)
+                pago.save()
+
+                orden = pago.orden
+                orden.estatus = 'pagada'
+                orden.save()
+
+                mesa = orden.mesa
+                mesa.estado = MesaEstado.objects.get(nombre='Disponible')
+                mesa.save()
+
+                return redirect('ordenes:ordenes_list')
+        return render(request, 'ordenes/ordenes_pagar.html', {'form': form})
 
 class MetodoPagoListView(LoginRequiredMixin, ListView):
     model = MetodoPago

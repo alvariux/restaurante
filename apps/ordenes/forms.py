@@ -29,12 +29,21 @@ class OrdenForm(forms.ModelForm):
             'empleado': forms.HiddenInput(attrs={'class': 'form-control'})
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'mesa' in self.fields:
+            self.fields['mesa'].queryset = Mesa.objects.filter(estado__nombre__iexact='Disponible')
+
     def save(self, commit=True):
         orden = super().save(commit=False)
         if commit:
             orden.estatus = 'pendiente'  # Set default status
             orden.empleado = self.initial['empleado']
             orden.save()
+
+            mesa = orden.mesa
+            mesa.estado = MesaEstado.objects.get(nombre='Ocupada')
+            mesa.save()
         return orden
 
 class OrdenDetalleForm(forms.Form):
@@ -49,4 +58,14 @@ class MetodoPagoForm(forms.ModelForm):
         fields = ['nombre']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+class PagoForm(forms.ModelForm):
+    class Meta:
+        model = Pago
+        fields = ['orden', 'metodo_pago', 'cantidad']
+        widgets = {
+            'orden': forms.HiddenInput(),
+            'metodo_pago': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
         }
