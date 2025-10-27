@@ -88,8 +88,8 @@
                         <h5 class="card-title mb-0">Ventas de la Semana</h5>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
-                            <p class="text-muted">Gráfico de ventas semanales aparecería aquí</p>
+                        <div class="d-flex align-items-center justify-content-center" style="height: 300px;">                            
+                            <canvas id="myChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -234,4 +234,36 @@
         </div>
     </div>
 </div>
+
+<script src=" https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js "></script>
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [
+        {% for venta in ventas_por_dia %}
+            '{{venta.dia|safe}}'{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ],
+      datasets: [{
+        label: 'Ventas',
+        data: [
+          {% for venta in ventas_por_dia %}
+              {{venta.total|safe}}{% if not forloop.last %},{% endif %}
+          {% endfor %}
+            ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 {% endblock %}
