@@ -30,12 +30,16 @@ def index_user(request):
     # Ultimas 5 ordenes
     ultimas_ordenes = Orden.objects.all().order_by('-fecha_hora')[:5]
 
+    # Platillos mas vendidos
+    platillos_mas_vendidos = Orden.objects.filter(estatus='pagada').values('detalles__platillo__nombre').annotate(total_vendido=Sum('detalles__cantidad')).order_by('-total_vendido')[:10]
+
     context = {
         'ventas_totales': total_sales,
         'cantidad_ordenes': cantidad_ordenes,
         'ordenes_semana': ordenes_semana,
         'ventas_por_dia': ventas_por_dia,
         'ultimas_ordenes': ultimas_ordenes,
+        'platillos_mas_vendidos': platillos_mas_vendidos,
     }
 
     return render(request, 'main/main_index.html', context)

@@ -132,49 +132,19 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Plato</th>
-                                        <th>Ventas</th>
-                                        <th>Ingresos</th>
-                                        <th>Rating</th>
-                                        <th>Tendencia</th>
+                                        <th>Platillo</th>
+                                        <th>Cantidad</th>                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Pollo a la Brasa</td>
-                                        <td>86</td>
-                                        <td>$1,204.00</td>
-                                        <td>4.8/5</td>
-                                        <td><i class="bi bi-arrow-up text-success"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lasaña de la Abuela</td>
-                                        <td>64</td>
-                                        <td>$831.36</td>
-                                        <td>4.7/5</td>
-                                        <td><i class="bi bi-arrow-up text-success"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Salmón con Hierbas</td>
-                                        <td>52</td>
-                                        <td>$883.48</td>
-                                        <td>4.9/5</td>
-                                        <td><i class="bi bi-dash text-secondary"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pastel de Chocolate</td>
-                                        <td>48</td>
-                                        <td>$335.52</td>
-                                        <td>4.6/5</td>
-                                        <td><i class="bi bi-arrow-up text-success"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cheesecake de Frutos Rojos</td>
-                                        <td>42</td>
-                                        <td>$293.58</td>
-                                        <td>4.5/5</td>
-                                        <td><i class="bi bi-arrow-down text-danger"></i></td>
-                                    </tr>
+                                    {% for platillo in platillos_mas_vendidos %}
+                                        {% if platillo.total_vendido > 0 %}
+                                        <tr>
+                                            <td>{{ platillo.detalles__platillo__nombre }}</td>
+                                            <td>{{ platillo.total_vendido }}</td>                                            
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
