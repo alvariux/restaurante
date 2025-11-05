@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.platillos',
     'apps.ordenes',
+    'rest_framework',
+    'apps.api',
 ]
 
 MIDDLEWARE = [
